@@ -1,0 +1,93 @@
+version: 2.1
+orbs:
+  kube-orb: circleci/kubernetes@0.11.2
+  slack: circleci/slack@3.4.2
+jobs:
+  build:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: false
+    steps:
+      - checkout
+      - run:
+          name: set deployment image name env
+          command: |
+            echo 'export BITBUCKET_COMMIT_SHORT=$(echo $CIRCLE_SHA1 | cut -c1-7 )' >> IMG_ENV
+            echo 'export IMAGE_NAME=$FN_ARTIFACT_REGISTRY_PATH/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$BITBUCKET_COMMIT_SHORT' >> IMG_ENV
+            echo -n $FN_ARTIFACT_REGISTRY | base64 --decode > FN_ARTIFACT_REGISTRY.json
+      - run:
+          name: Decode ssh
+          command: |
+            mkdir -p ssh
+            echo -n "$SRE_SH_SSH" | base64 --decode > ssh/id_rsa
+      - run:
+          name: build docker image
+          command: |
+            source IMG_ENV
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWD
+            docker build --no-cache -t $IMAGE_NAME -f Dockerfile .
+      - run:
+          name: docker push artifact registry
+          command: |
+            source IMG_ENV
+            gcloud auth activate-service-account --key-file FN_ARTIFACT_REGISTRY.json
+            gcloud auth configure-docker europe-docker.pkg.dev
+            cat FN_ARTIFACT_REGISTRY.json | docker login -u _json_key --password-stdin https://europe-docker.pkg.dev
+            docker push $IMAGE_NAME
+      - run: exit 0
+      - slack/status:
+          failure_message: "Yikes!!! $CIRCLE_USERNAME $CIRCLE_PR_USERNAME, Job $CIRCLE_JOB $CIRCLE_PROJECT_REPONAME Branch $CIRCLE_BRANCH  failed. Please check your source. Thanks"
+          success_message: "Hi $CIRCLE_USERNAME $CIRCLE_PR_USERNAME, Job $CIRCLE_JOB $CIRCLE_PROJECT_REPONAME $CIRCLE_BRANCH Success"
+          webhook: https://hooks.slack.com/services/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
+  deploy-to-cluster:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - kube-orb/install-kubectl
+      - run:
+          name: Install google cloud
+          command: |
+            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+            sudo apt-get update && sudo apt-get install google-cloud-sdk
+            echo -n $FN_FND_DEV_GKE_UEW1_01 | base64 --decode > FN_FND_DEV_GKE_UEW1_01.json
+            gcloud config set project test-funding
+            gcloud auth activate-service-account --key-file FN_FND_DEV_GKE_UEW1_01.json
+            gcloud container clusters get-credentials fn-fnd-dev-gke-uew1-01 --zone europe-west1
+      - run:
+          name: set deployment image name env
+          command: |
+            echo 'export BITBUCKET_COMMIT_SHORT=$(echo $CIRCLE_SHA1 | cut -c1-7 )' >> IMG_ENV
+            echo 'export IMAGE_NAME=$FN_ARTIFACT_REGISTRY_PATH/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$BITBUCKET_COMMIT_SHORT' >> IMG_ENV
+      - run:
+          name: deployment
+          command: |
+            source IMG_ENV
+            if [ "$CIRCLE_BRANCH" == "master" ]
+            then
+              kubectl set image deployment/biz-api-service biz-api-service=$IMAGE_NAME -n prod-biz-api --record
+            elif [ "$CIRCLE_BRANCH" == "staging" ]
+            then
+              kubectl set image deployment/biz-api-service biz-api-service=$IMAGE_NAME -n staging-biz-api --record
+            elif [ "$CIRCLE_BRANCH" == "development" ]
+            then
+              kubectl set image deployment/biz-api-service biz-api-service=$IMAGE_NAME -n dev-biz-api --record
+            fi
+      - run: exit 0
+      - slack/status:
+          failure_message: "Yikes!!! $CIRCLE_USERNAME $CIRCLE_PR_USERNAME, Job $CIRCLE_JOB $CIRCLE_PROJECT_REPONAME Branch $CIRCLE_BRANCH failed. Please check your source. Thanks"
+          success_message: "Hi $CIRCLE_USERNAME $CIRCLE_PR_USERNAME, Job $CIRCLE_JOB $CIRCLE_PROJECT_REPONAME $CIRCLE_BRANCH success"
+          webhook: https://hooks.slack.com/services/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
+workflows:
+  version: 2.1
+  build_and_dockerize:
+    jobs:
+      - build:
+          context: NG_DOCKER
+          filters:
+            branches:
+              only: [ development, staging, master, test]
+      - deploy-to-cluster:
+          context: NG_DOCKER
+          requires:
+            - build
