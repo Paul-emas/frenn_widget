@@ -1,0 +1,538 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+::selection {
+  background-color: #6bbbd1;
+  color: #fff;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+body {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #2d2d3d;
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.modal {
+  left: 0;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.modal__box {
+  width: 412px;
+  height: 730px;
+  min-height: 730px;
+  max-height: 730px;
+  background: #f5f4fa;
+  z-index: 20;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 440px) {
+  .modal__box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    white-space: normal;
+  }
+}
+
+.space {
+  padding: 0 26px;
+  padding-top: 14px;
+  padding-bottom: 30px;
+}
+
+@media screen and (max-width: 440px) {
+  .space {
+    padding-bottom: 0;
+    height: 100%;
+  }
+}
+
+.form__space {
+  padding-top: 19px;
+  position: relative;
+}
+
+.form-box {
+  margin-bottom: 6px;
+}
+
+.form-box.mb-0 {
+  margin-bottom: 5px;
+}
+
+.form__caption {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #2d2d3d;
+  padding-top: 22px;
+}
+
+.form__caption.base {
+  font-size: 16px;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.form .card-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form .card-details .form-input {
+  width: 159px;
+}
+
+.form .card-details .form-input input {
+  border: none;
+  font-family: "Inter", sans-serif;
+  padding: 0 !important;
+}
+
+.form-input {
+  width: 360px;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+}
+
+@media screen and (max-width: 440px) {
+  .form-input {
+    width: 100%;
+  }
+}
+
+.form-input .icon-box {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  height: 58px;
+}
+
+.form-input.bl-none input {
+  border: none;
+  margin-left: 10px;
+}
+
+.form-input input {
+  width: 100%;
+  margin-left: 25px;
+  margin-right: 27px;
+  height: 47%;
+  border: none;
+  border-left: 1px solid #bdbcbc;
+  background: #fff;
+  outline: none;
+  padding: 0 16px;
+}
+
+.form-input input::placeholder {
+  color: #7171714d;
+  font-size: 12px;
+}
+
+.form-pin-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-pin-box.mb-small {
+  margin-bottom: 40px !important;
+}
+
+.form-pin-box.mb-long {
+  margin-bottom: 163px;
+}
+
+.form-pin-input {
+  background: #fff;
+  width: 63px;
+  height: 58px;
+  text-align: center;
+  font-size: 32px;
+  border: none;
+  outline: none;
+}
+
+.form-radio {
+  margin-top: 21px;
+}
+
+.form-radio .container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 44px;
+  margin-bottom: 9px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.form-radio .container .label-text {
+  margin-top: 5px;
+}
+
+.form-radio .container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.form-radio .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background: #f5f4fa;
+  border: 1px solid #2d2d3d;
+  border-radius: 50px;
+}
+
+.form-radio .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.form-radio .container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.form-radio .container .checkmark:after {
+  height: 16px;
+  width: 16px;
+  background-color: #6ab8ce;
+  border-radius: 100%;
+  top: 5px;
+  left: 5px;
+}
+
+.form__range-container {
+  margin-top: 32px;
+}
+
+.form__range-box {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  position: relative;
+}
+
+.form__range-box-item:nth-child(2) .io {
+  padding-left: 20px;
+}
+
+.form__range-box-item:last-child .io {
+  padding-right: 15px;
+}
+
+.form__range-box .range-line {
+  width: 328px;
+  height: 4px;
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background-color: #6ab8ce;
+  z-index: -1;
+}
+
+.form__range-box .amount {
+  font-size: 12px;
+  line-height: 20px;
+  color: #3d3d4d;
+  text-align: center;
+}
+
+.form__range-box .dot {
+  width: 8px;
+  height: 8px;
+  background: #2d2d3d;
+  box-shadow: 2px 4px 25px rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-top: 6px;
+}
+
+.form__range-box .line {
+  width: 11px;
+  height: 0px;
+  border: 1px solid #c4c4c4;
+  transform: rotate(90deg);
+  margin: 0 auto;
+  margin-top: 9px;
+}
+
+.form__range-box .date {
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 20px;
+  margin-top: 7px;
+  text-align: center;
+  color: #717171;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 17px;
+  padding-top: 70px;
+}
+
+@media screen and (max-width: 440px) {
+  .loader {
+    height: 90%;
+    align-items: center;
+  }
+}
+
+.loader__content {
+  text-align: center;
+}
+
+.loader__caption {
+  margin-top: 19px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #2d2d3d;
+}
+
+.start {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 440px) {
+  .start {
+    display: block;
+  }
+}
+
+.spinner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.52);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner svg {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.show-spinner {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease-in;
+}
+
+@keyframes size {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes sizeOut {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.react-datepicker__input-container input {
+  width: 90%;
+  height: 100%;
+  padding: 5px 16px;
+}
+
+.form-error {
+  border: 1px solid #ff4e4e;
+}
+
+.form-error-msg {
+  font-style: normal;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ff4e4e;
+  margin-top: 5px;
+}
+
+.react-datepicker__day--selected {
+  background-color: #6ab8ce !important;
+}
+
+.calendar {
+  margin-top: 20px;
+}
+
+.calendar-btn {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.react-calendar {
+  border: none !important;
+  border-radius: 10px;
+  padding: 16px 16px;
+  padding-bottom: 20px;
+  max-height: 350px;
+}
+
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 1rem !important;
+}
+
+.react-tel-input {
+  margin-left: 25px;
+}
+
+.selected-flag .flag {
+  transform: scale(1.6) !important;
+}
+
+.react-tel-input .arrow {
+  display: none;
+}
+
+.react-tel-input .flag-dropdown {
+  border: none !important;
+  background: #fff !important;
+}
+
+.react-tel-input .form-control {
+  /* border: none !important; */
+  border-left: 1px solid #bdbcbc !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-right: none !important;
+}
+
+.hide {
+  display: none;
+}
+
+.agreement {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.agreement a {
+  color: #00b6d1;
+  text-decoration: none;
+}
