@@ -11,7 +11,7 @@ const Footer = ({ className, children }) => {
 						fill="#787878"
 					/>
 				</svg>
-				<span>Payment is secured by Frenn.</span>
+				<span>Payment is secured.</span>
 			</div>
 
 			<style jsx="true">{`

@@ -11,7 +11,7 @@ const Tabs = () => {
 	}, [activeTab, dispatch]);
 
 	const tabsData = [
-		{ id: 'existing_user', name: 'Existing Frenn User' },
+		{ id: 'existing_user', name: 'Existing User' },
 		{ id: 'new_user', name: 'New User' },
 	];
 

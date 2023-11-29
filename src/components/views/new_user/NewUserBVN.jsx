@@ -203,7 +203,7 @@ const NewUserBVN = () => {
 				<Footer>
 					{!errorMessage && (
 						<p className="agreement">
-							By clicking proceed you agree to <a href="/">Frenn credit agreement</a>
+							By clicking proceed you agree to <a href="/">Credit agreement</a>
 						</p>
 					)}
 					<Recaptcha label={buttonLabel} type="submit" loading={isLoading} />
